@@ -9,14 +9,6 @@ const (
 	Corps = "corps du Christ"
 )
 
-type Objet struct {
-	Nom string
-}
-
-func (o *Objet) Transsubstancie(typeDeDestination string) *Espece {
-	return &Espece{Nom: o.Nom, Type: typeDeDestination}
-}
-
 type Espece struct {
 	Nom  string
 	Type string
@@ -28,6 +20,16 @@ type Humain interface {
 	Dire(parole string)
 	Lit(passage string)
 	Donne(objet *Objet, destinataire Humain)
+}
+
+// Objet
+
+type Objet struct {
+	Nom string
+}
+
+func (o *Objet) Transsubstancie(typeDeDestination string) *Espece {
+	return &Espece{Nom: o.Nom, Type: typeDeDestination}
 }
 
 // Prêtre
@@ -50,7 +52,7 @@ func (p *Pretre) GetNom() string {
 	return p.Nom
 }
 
-func (p *Pretre) Transsubstancie(objet *Objet, enType string) *Espece {
+func (p *Pretre) Consacre(objet *Objet, enType string) *Espece {
 	fmt.Printf("L'Esprit Saint transsubstancie %s en %s \n", objet.Nom, enType)
 	return objet.Transsubstancie(enType)
 }
@@ -105,8 +107,8 @@ func LiturgieDeLeucharistie(celebrant *Pretre, acolyte1 *Acolyte, acolyte2 *Acol
 	acolyte2.Donne(pain, celebrant)
 	acolyte2.Donne(vin, celebrant)
 
-	celebrant.Transsubstancie(vin, Sang)
-	celebrant.Transsubstancie(pain, Corps)
+	celebrant.Consacre(vin, Sang)
+	celebrant.Consacre(pain, Corps)
 }
 
 func main() {
