@@ -4,12 +4,22 @@ import (
 	"fmt"
 )
 
+const (
+	Sang  = "sang du Christ"
+	Corps = "corps du Christ"
+)
+
 type Objet struct {
 	Nom string
 }
 
+func (o *Objet) Transsubstancie(typeDeDestination string) *Espece {
+	return &Espece{Nom: o.Nom, Type: typeDeDestination}
+}
+
 type Espece struct {
-	Nom string
+	Nom  string
+	Type string
 }
 
 type Humain interface {
@@ -20,13 +30,8 @@ type Humain interface {
 	Donne(objet *Objet, destinataire Humain)
 }
 
+// Prêtre
 type Pretre struct {
-	Humain
-	Nom      string
-	Position string
-}
-
-type Acolyte struct {
 	Humain
 	Nom      string
 	Position string
@@ -43,6 +48,19 @@ func (p *Pretre) Dire(parole string) {
 
 func (p *Pretre) GetNom() string {
 	return p.Nom
+}
+
+func (p *Pretre) Transsubstancie(objet *Objet, enType string) *Espece {
+	fmt.Printf("L'Esprit Saint transsubstancie %s en %s \n", objet.Nom, enType)
+	return objet.Transsubstancie(enType)
+}
+
+// Acolyte
+
+type Acolyte struct {
+	Humain
+	Nom      string
+	Position string
 }
 
 func (p *Acolyte) AllerA(position string) {
@@ -78,8 +96,17 @@ func LiturgieDeLeucharistie(celebrant *Pretre, acolyte1 *Acolyte, acolyte2 *Acol
 	acolyte1.AllerA("l'autel")
 	acolyte2.AllerA("l'autel")
 
+	pain := &Objet{Nom: "le pain"}
+	vin := &Objet{Nom: "le vin"}
+
 	acolyte1.Donne(&Objet{Nom: "le calice"}, celebrant)
 	acolyte2.Donne(&Objet{Nom: "le ciboire"}, celebrant)
+
+	acolyte2.Donne(pain, celebrant)
+	acolyte2.Donne(vin, celebrant)
+
+	celebrant.Transsubstancie(vin, Sang)
+	celebrant.Transsubstancie(pain, Corps)
 }
 
 func main() {
