@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"strings"
 )
 
 const (
@@ -32,59 +33,10 @@ func (o *Objet) Transsubstancie(typeDeDestination string) *Espece {
 	return &Espece{Nom: o.Nom, Type: typeDeDestination}
 }
 
-// Prêtre
-type Pretre struct {
-	Humain
-	Nom      string
-	Position string
-}
-
-func (p *Pretre) AllerA(position string) {
-	p.Position = position
-	fmt.Printf("%s (le prêtre) s'en va à %s \n", p.Nom, p.Position)
-}
-
-func (p *Pretre) Dire(parole string) {
-	fmt.Printf("%s dit: %s \n", p.Nom, parole)
-}
-
-func (p *Pretre) GetNom() string {
-	return p.Nom
-}
-
-func (p *Pretre) Consacre(objet *Objet, enType string) *Espece {
-	fmt.Printf("L'Esprit Saint transsubstancie %s en %s \n", objet.Nom, enType)
-	return objet.Transsubstancie(enType)
-}
-
-// Acolyte
-
-type Acolyte struct {
-	Humain
-	Nom      string
-	Position string
-}
-
-func (p *Acolyte) AllerA(position string) {
-	p.Position = position
-	fmt.Printf("%s (un acolyte) s'en va à %s \n", p.Nom, p.Position)
-}
-
-func (p *Acolyte) Lit(passage string) {
-	fmt.Printf("%s lit: %s \n", p.Nom, passage)
-}
-
-func (p *Acolyte) Donne(objet *Objet, destinataire Humain) {
-	fmt.Printf("%s donne %s à %s \n", p.Nom, objet.Nom, destinataire.GetNom())
-}
-
 func RitesInitiaux(celebrant *Pretre, acolyte1 *Acolyte, acolyte2 *Acolyte) {
 	ministres := make([]Humain, 0, 3)
 	ministres = append(ministres, celebrant, acolyte1, acolyte2)
-
-	for _, ministre := range ministres {
-		ministre.AllerA("l'autel")
-	}
+	MarcheDesMinistres(ministres, "l'autel")
 
 	celebrant.Dire("Prions")
 }
@@ -94,9 +46,7 @@ func LiturgieDeLaParole(celebrant *Pretre, lecteur Humain) {
 }
 
 func LiturgieDeLeucharistie(celebrant *Pretre, acolyte1 *Acolyte, acolyte2 *Acolyte) {
-	celebrant.AllerA("l'autel")
-	acolyte1.AllerA("l'autel")
-	acolyte2.AllerA("l'autel")
+	MarcheDesMinistres([]Humain{acolyte1, acolyte2, celebrant}, "l'autel")
 
 	pain := &Objet{Nom: "le pain"}
 	vin := &Objet{Nom: "le vin"}
@@ -109,6 +59,30 @@ func LiturgieDeLeucharistie(celebrant *Pretre, acolyte1 *Acolyte, acolyte2 *Acol
 
 	celebrant.Consacre(vin, Sang)
 	celebrant.Consacre(pain, Corps)
+}
+
+func JoinAvecEt(elements []string) string {
+	if len(elements) == 0 {
+		return ""
+	}
+	if len(elements) == 1 {
+		return elements[0]
+	}
+
+	return strings.Join(elements[:len(elements)-1], ", ") + " et " + elements[len(elements)-1]
+}
+
+func Map[V any, R any](input []V, fn func(V) R) []R {
+	results := make([]R, len(input))
+	for i, item := range input {
+		results[i] = fn(item)
+	}
+	return results
+}
+
+func MarcheDesMinistres(ministres []Humain, versPosition string) {
+	noms := JoinAvecEt(Map(ministres, func(m Humain) string { return m.GetNom() }))
+	fmt.Printf("%s se dirigent vers %s \n", noms, versPosition)
 }
 
 func main() {
