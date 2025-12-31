@@ -1,5 +1,5 @@
 build:
-	go build -o main acolyte.go pretre.go main.go
+	go build -o main utils.go acolyte.go pretre.go main.go
 
 run: build
 	./main
