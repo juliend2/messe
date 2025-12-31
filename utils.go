@@ -13,6 +13,10 @@ func Map[V any, R any](input []V, fn func(V) R) []R {
 	return results
 }
 
+func typeof(v interface{}) string {
+	return fmt.Sprintf("%T", v)
+}
+
 func JoinAvecEt(elements []string) string {
 	if len(elements) == 0 {
 		return ""

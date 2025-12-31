@@ -10,19 +10,29 @@ type Acolyte struct {
 	Position string
 }
 
-func (p *Acolyte) AllerA(position string) {
-	p.Position = position
-	fmt.Printf("%s (un acolyte) s'en va à %s \n", p.Nom, p.Position)
+func (a *Acolyte) AllerA(position string) {
+	a.Position = position
+	fmt.Printf("%s (un acolyte) s'en va à %s \n", a.Nom, a.Position)
 }
 
-func (p *Acolyte) Lit(passage string) {
-	fmt.Printf("%s lit: %s \n", p.Nom, passage)
+func (a *Acolyte) Lit(passage string) {
+	fmt.Printf("%s lit: %s \n", a.Nom, passage)
 }
 
-func (p *Acolyte) GetNom() string {
-	return p.Nom
+func (a *Acolyte) GetNom() string {
+	return a.Nom
 }
 
-func (p *Acolyte) Donne(objet *Objet, destinataire Humain) {
-	fmt.Printf("%s donne %s à %s \n", p.Nom, objet.Nom, destinataire.GetNom())
+func (a *Acolyte) Donne(objet *Objet, destinataire Humain) {
+	fmt.Printf("%s donne %s à %s \n", a.Nom, objet.Nom, destinataire.GetNom())
+}
+
+func (a *Acolyte) MetSurAutel(objet Objets) {
+	// if typeof(objet) == "Objet" {
+	// 	objetString := objet.Nom
+	// } else {
+	// 	objetString := JoinAvecEt(Map(objets, func (obj) string { return obj.Nom }))
+	// }
+	// fmt.Printf("%s met sur l'autel ", objetString)
+	fmt.Printf("%s met sur l'autel les %s objets \n", a.Nom, objet.Nom)
 }

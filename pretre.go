@@ -16,7 +16,7 @@ func (p *Pretre) AllerA(position string) {
 	fmt.Printf("%s (le prêtre) s'en va à %s \n", p.Nom, p.Position)
 }
 
-func (p *Pretre) Dire(parole string) {
+func (p *Pretre) Dit(parole string) {
 	fmt.Printf("%s dit: %s \n", p.Nom, parole)
 }
 
